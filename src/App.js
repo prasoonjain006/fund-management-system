@@ -1,8 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 import LoginPage from './Pages/Login';
-import Signup from './Components/Auth/signup';
+import Signup from './Pages/Signup';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ViewFunds from './Pages/ViewFunds';
+import DonateFunds from './Pages/DonateFunds';
 // import Navbar from './Components/Navbar/navbar';
 function App() {
   return (
@@ -12,6 +14,9 @@ function App() {
           <Route path="/" exact element={<LoginPage />} />
           <Route path="/login" exact element={<LoginPage />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/viewfunds" element={<ViewFunds />} />
+          <Route path="/donatefunds" element={<DonateFunds />} />
+
           {/* <Route path="/navbar" element={<Navbar />} /> */}
 
           {/* <Route path="/users" element={<Users />} />
