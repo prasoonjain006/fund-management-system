@@ -6,7 +6,7 @@ import Navbar from "../Components/Navbar/navbar";
 export default function DonateFunds() {
   return (
     <>
-      <Navbar />
+      <Navbar page="DonateFunds" />
       {/* <h1>Cart</h1> */}
       <Donate />
     </>

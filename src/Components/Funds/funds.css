@@ -10,3 +10,15 @@
     padding-bottom: 10px;
     font-family: "Poppins", sans-serif;
 }
+
+.home {
+    font-size: 100px;
+    margin: auto;
+    padding-top: 10px;
+}
+
+.im{
+    margin: auto;
+    width: 700px;
+    height: 700px;
+}

@@ -34,7 +34,13 @@ export default function Signup() {
 
   function Updatesubmit(e) {
     e.preventDefault();
-    if (password === "" || email === "" || confirmPassword === "") {
+    // console.log(password);
+    // console.log(email)
+    // console.log(confirmPassword)
+    // console.log(name)
+    // console.log(number)
+
+    if (password === "" || email === "" || confirmPassword === "" || name === "" || number === "") {
       alert("Enter all the fields");
     } else if (password != confirmPassword) {
       alert("Password do not match");
@@ -72,7 +78,7 @@ export default function Signup() {
         </Link>
         <form>
         <input
-            oCnhange={(e) => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             type="text"
             id="login"
             className="fadeIn second"
@@ -80,7 +86,7 @@ export default function Signup() {
             placeholder="Enter Name"
           />
           <input
-            oCnhange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             type="email"
             id="login"
             className="fadeIn second"
@@ -104,7 +110,7 @@ export default function Signup() {
             placeholder=" Confirm password"
           />
           <input
-            oCnhange={(e) => setNumber(e.target.value)}
+            onChange={(e) => setNumber(e.target.value)}
             type="text"
             id="login"
             className="fadeIn second"

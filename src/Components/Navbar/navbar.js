@@ -1,19 +1,45 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { useNavigate } from "react-router-dom";
+
 
 const navigation = [
-  { name: "Home", href: "#", current: true },
-  { name: "Donate Funds", href: "#", current: false },
-  { name: "View Funds", href: "#", current: false },
-  { name: "My Donations", href: "#", current: false },
+  { name: "Home", href: "/home", current: false },
+  { name: "Donate Funds", href: "/donatefunds", current: false },
+  { name: "View Funds", href: "/viewfunds", current: false },
+  { name: "My Donations", href: "/mydonations", current: false },
 ];
+console.log()
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const navigate = useNavigate();
+  function signout(){
+    navigate("/login")
+    // console.log("jgjg");
+  }
+  console.log(props)
+  if(props.page === "MyDonations")
+  {
+    navigation[3].current = true;
+  }
+  if(props.page === "ViewFunds")
+  {
+    navigation[2].current = true;
+  }
+  if(props.page === "DonateFunds")
+  {
+    navigation[1].current = true;
+  }
+  if(props.page === "Home")
+  {
+    navigation[0].current = true;
+  }
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -98,33 +124,9 @@ export default function Navbar() {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
+                          <a onClick={()=>{
+                            signout();
+                          }}
                             href="#"
                             className={classNames(
                               active ? "bg-gray-100" : "",

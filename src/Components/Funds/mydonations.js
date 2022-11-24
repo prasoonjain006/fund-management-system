@@ -29,45 +29,43 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, Amount, TransactionId, Date,Message) {
-  return { name,Amount, TransactionId, Date, Message};
+function createData(Amount, TransactionId, Date,Payment) {
+  return {Amount, TransactionId, Date, Payment};
 }
 
 const rows = [
-  createData('Abhinav Agarwal', 10000, "01ASFRT45628", "15-11-22", "Good Initiative"),
-  createData('Amit Agarwal', 5000, "01ASFRT45628", "12-11-22", "Good Work"),
-  createData('Abhay Gupta', 15000, "01ASFGRT45628", "10-11-22", "Good Initiative"),
-  createData('Ashi Gupta', 30000, "01ASFRFGD45628", "1-11-22", "Good Initiative"),
-  createData('Anita Agarwal', 10000, "01ASFRSFET45628", "26-10-22", "Good Initiative"),
+  createData(10000, "01ASFRT45628", "15-11-22", "UPI"),
+  createData(5000, "01ASFRT45628", "12-11-22", "Debit/credit card"),
+  createData(15000, "01ASFGRT45628", "10-11-22", "UPI"),
+  createData(30000, "01ASFRFGD45628", "1-11-22", "Wallet"),
+  createData(10000, "01ASFRSFET45628", "26-10-22", "UPI"),
 ];
 
 export default function CustomizedTables() {
   return (
-    <div className='tbh wrapper fadeInDown pt-6'>
+    <div className='tbh tbh wrapper fadeInDown pt-6'>
         <div className='hd'>
-            <p> All Transactions</p>
+            <p> My Donations</p>
         </div>
         <TableContainer width= "80%" component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
             <TableRow>
-                <StyledTableCell>Payee Name</StyledTableCell>
-                <StyledTableCell align="center">Amount</StyledTableCell>
+                <StyledTableCell>Amount</StyledTableCell>
                 <StyledTableCell align="center">Transaction - Id</StyledTableCell>
                 <StyledTableCell align="center">Date</StyledTableCell>
-                <StyledTableCell align="center">Message</StyledTableCell>
+                <StyledTableCell align="center">Mode of Payment</StyledTableCell>
             </TableRow>
             </TableHead>
             <TableBody>
             {rows.map((row) => (
-                <StyledTableRow key={row.name}>
+                <StyledTableRow key={row.Amount}>
                 <StyledTableCell component="th" scope="row">
-                    {row.name}
+                    {row.Amount}
                 </StyledTableCell>
-                <StyledTableCell align="center">{row.Amount}</StyledTableCell>
                 <StyledTableCell align="center">{row.TransactionId}</StyledTableCell>
                 <StyledTableCell align="center">{row.Date}</StyledTableCell>
-                <StyledTableCell align="center">{row.Message}</StyledTableCell>
+                <StyledTableCell align="center">{row.Payment}</StyledTableCell>
                 </StyledTableRow>
             ))}
             </TableBody>
