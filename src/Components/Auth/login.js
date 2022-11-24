@@ -14,7 +14,7 @@ export default function Login() {
 
   useEffect(() => {
     axios
-      .get(`https://appleute-api.herokuapp.com/api/auth/checkauth`, {
+      .get(`http://localhost:5000/api/auth/checkauth`, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "x-access-token": cookies.get("token"),
@@ -22,7 +22,7 @@ export default function Login() {
       })
       .then((res) => {
         console.log(res.data);
-        navigate("/products");
+        navigate("/home");
       })
       .catch((err) => {
         console.log(err);
@@ -37,7 +37,7 @@ export default function Login() {
       alert.error("Enter password and email");
     } else {
       axios
-        .post(`https://appleute-api.herokuapp.com/api/auth/signin`, {
+        .post(`http://localhost:5000/api/auth/signin`, {
           email: email,
           password: password,
         })
@@ -47,7 +47,7 @@ export default function Login() {
           cookies.set("id", res.data.id);
           cookies.set("token", res.data.accessToken);
           cookies.set("email", res.data.email);
-          navigate("/products");
+          navigate("/home");
         })
         .catch((err) => {
           console.log(err);

@@ -9,6 +9,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import "./funds.css"
 
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
+
+const cookies = new Cookies();
+
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -29,19 +37,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(Amount, TransactionId, Date,Payment) {
-  return {Amount, TransactionId, Date, Payment};
-}
 
-const rows = [
-  createData(10000, "01ASFRT45628", "15-11-22", "UPI"),
-  createData(5000, "01ASFRT45628", "12-11-22", "Debit/credit card"),
-  createData(15000, "01ASFGRT45628", "10-11-22", "UPI"),
-  createData(30000, "01ASFRFGD45628", "1-11-22", "Wallet"),
-  createData(10000, "01ASFRSFET45628", "26-10-22", "UPI"),
-];
+
 
 export default function CustomizedTables() {
+  const [funds, setFunds] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/funds/my-donations`, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "x-access-token": cookies.get("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setFunds(res.data);
+
+      })
+      .catch((err) => {
+        console.log(err);
+        cookies.set("token", "");
+        navigate("/login");
+      });
+  }, []);
   return (
     <div className='tbh tbh wrapper fadeInDown pt-6'>
         <div className='hd'>
@@ -58,14 +78,14 @@ export default function CustomizedTables() {
             </TableRow>
             </TableHead>
             <TableBody>
-            {rows.map((row) => (
-                <StyledTableRow key={row.Amount}>
+            { funds && funds.map((row) => (
+                <StyledTableRow key={row._id}>
                 <StyledTableCell component="th" scope="row">
-                    {row.Amount}
+                    {row.amount}
                 </StyledTableCell>
-                <StyledTableCell align="center">{row.TransactionId}</StyledTableCell>
-                <StyledTableCell align="center">{row.Date}</StyledTableCell>
-                <StyledTableCell align="center">{row.Payment}</StyledTableCell>
+                <StyledTableCell align="center">{row._id}</StyledTableCell>
+                <StyledTableCell align="center">{row.date}</StyledTableCell>
+                <StyledTableCell align="center">{row.mode_of_payment}</StyledTableCell>
                 </StyledTableRow>
             ))}
             </TableBody>

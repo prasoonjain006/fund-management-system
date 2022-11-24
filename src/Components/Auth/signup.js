@@ -16,7 +16,7 @@ export default function Signup() {
 
   useEffect(() => {
     axios
-      .get(`https://appleute-api.herokuapp.com/api/auth/checkauth`, {
+      .get(`http://localhost:5000/api/auth/checkauth`, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "x-access-token": cookies.get("token"),
@@ -51,9 +51,12 @@ export default function Signup() {
     }
     else {
       axios
-        .post(`https://appleute-api.herokuapp.com/api/auth/signup`, {
+        .post(`http://localhost:5000/api/auth/signup`, {
           email: email,
           password: password,
+          name:name,
+          number:number,
+          
         })
         .then((res) => {
           console.log("response from submitting the form successful", res.data);

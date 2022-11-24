@@ -10,11 +10,42 @@ export default function Donate() {
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
+  const [mode_of_payment, setModeOfPayment] = useState("");
   const cookies = new Cookies();
   const navigate = useNavigate();
 
   function Updatesubmit(e) {
     e.preventDefault();
+
+    console.log(amount, name, mode_of_payment, message);
+    const data = {
+      amount : amount,
+      message : message,
+      name : name,
+      mode_of_payment: mode_of_payment,
+      date: new Date().toJSON().slice(0, 10)
+    };
+
+    let token = cookies.get('token')
+    const headers = {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    }
+    axios.post(
+        `http://localhost:5000/funds/donate`, data,
+        {
+          headers: headers
+        }
+      )
+      .then((res) => {
+        alert("successfully Donated");
+
+        // navigate("/home");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Some error");
+      });
   }
 
   return (
@@ -52,7 +83,7 @@ export default function Donate() {
             placeholder="Enter Amount"
           />
           <select
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => setModeOfPayment(e.target.value)}
             type="text"
             area="pra"
             id="login"
@@ -78,7 +109,7 @@ export default function Donate() {
             className="fadeIn fourth loginBtn mt-4"
           >
             {" "}
-            Login
+            Submit
           </button>
         </form>
         {/* Remind Passowrd */}
