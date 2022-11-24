@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const cookies = new Cookies();
+  const[number,setNumber] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -32,13 +34,22 @@ export default function Signup() {
 
   function Updatesubmit(e) {
     e.preventDefault();
-    if (password === "" || email === "" || confirmPassword === "") {
+    // console.log(password);
+    // console.log(email)
+    // console.log(confirmPassword)
+    // console.log(name)
+    // console.log(number)
+
+    if (password === "" || email === "" || confirmPassword === "" || name === "" || number === "") {
       alert("Enter all the fields");
     } else if (password != confirmPassword) {
       alert("Password do not match");
     } else if (password.length < 6) {
       alert("Password must be 6 digit long");
-    } else {
+    } else if(!(number.length === 10)){
+      alert("Enter Valid Number");
+    }
+    else {
       axios
         .post(`https://appleute-api.herokuapp.com/api/auth/signup`, {
           email: email,
@@ -66,6 +77,14 @@ export default function Signup() {
           <h2 className="active ">Sign Up </h2>
         </Link>
         <form>
+        <input
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+            id="login"
+            className="fadeIn second"
+            name="login"
+            placeholder="Enter Name"
+          />
           <input
             onChange={(e) => setEmail(e.target.value)}
             type="email"
@@ -89,6 +108,14 @@ export default function Signup() {
             className="fadeIn third"
             name="login"
             placeholder=" Confirm password"
+          />
+          <input
+            onChange={(e) => setNumber(e.target.value)}
+            type="text"
+            id="login"
+            className="fadeIn second"
+            name="login"
+            placeholder="Enter your mobile number"
           />
           <button
             className="fadeIn fourth loginBtn mt-4"

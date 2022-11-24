@@ -1,191 +1,45 @@
-// import React, { useState, useEffect } from "react";
-// import "./navbar.css";
-// import axios from "axios";
-// import Cookies from "universal-cookie";
-// import { Dropdown } from "react-bootstrap";
-// import {
-//   BrowserRouter,
-//   Route,
-//   Redirect,
-//   useNavigate,
-//   Link,
-// } from "react-router-dom";
-
-// const cookies = new Cookies();
-
-// export default function Navbar(props) {
-//   const [name, setName] = useState("");
-
-// //   useEffect(() => {
-// //     setName(cookies.get("username"));
-// //     console.log(cookies);
-// //   }, []);
-
-//   const navigate = useNavigate();
-//   const submitForm = (e) => {
-//     console.log(props.value);
-//     if (props.value === 1) props.handleData(2);
-//     else props.handleData(1);
-//   };
-
-//   const onLogout = async () => {
-//     const token = cookies.get("token");
-//     const api = `auth/user/logout`;
-//     cookies.remove("token");
-//     cookies.remove("email");
-//     cookies.remove("id");
-//     cookies.remove("image");
-//     cookies.remove("username");
-//     cookies.remove("logo");
-//     cookies.remove("businessname");
-//     cookies.remove("phone_number");
-//     cookies.remove("isVerify");
-//     navigate("/");
-
-//     //   axios.post(api,{}, {
-//     //     headers: {
-//     //       'Authorization': 'Token'+' '+cookies.get('token')
-//     //     }
-//     // })
-//     // .then(response => {
-//     //     console.log(response);
-//     //     console.log(cookies);
-//     //     cookies.remove("token");
-//     //     cookies.remove("email");
-//     //     cookies.remove("id");
-//     //     cookies.remove("image");
-//     //     cookies.remove("username");
-//     //     cookies.remove("logo");
-//     //     cookies.remove("businessname");
-//     //     cookies.remove("phone_number");
-//     //     cookies.remove("isVerify");
-//     //     history.push('/')
-//     // })
-//     // .catch((error) => {
-//     //     console.log(error);
-//     //   });
-//   };
-
-//   return (
-//     <div>
-//       <header id="navbar">
-//         <div id="home">
-//           <button id="menubtn" onClick={() => submitForm()}>
-//             <img
-//               src="/Images/menuicon.svg"
-//               height="15vh"
-//               alt=""
-//               style={{ margin: "3px 5px", color: "black" }}
-//             />{" "}
-//           </button>
-//           <img
-//             alt=""
-//             id="menufull"
-//             src="/Images/menuicon.svg"
-//             height="15px"
-//             onClick={() => submitForm()}
-//             style={{ margin: "3px 5px", color: "black", cursor: "pointer" }}
-//           />
-//           <Link to="/home">
-//             <img
-//               alt=""
-//               style={{ margin: "0px 10px" }}
-//               id="mylogo"
-//               src={cookies.get("logo")}
-//             />
-//           </Link>
-//           <Link to="/home">
-//             <p
-//               style={{
-//                 "font-size": "3vh",
-//                 margin: "0px 0px",
-//                 color: "black",
-//                 fontFamily: "GFS Neohellenic, sans-serif",
-//               }}
-//             >
-//               {cookies.get("businessName")}
-//             </p>
-//           </Link>
-//         </div>
-//         <div id="userLinks">
-//           <p
-//             className="pn"
-//             id="name"
-//             style={{ margin: "4px 5px", color: "black", fontSize: "2.2vh" }}
-//           >
-//             Welcome, Yash Agarwal
-//           </p>
-//           {cookies.get("image") ? (
-//             <a
-//               className="pn"
-//               style={{ margin: "0px 5px", color: "black" }}
-//               alt="profilepic"
-//             >
-//               <img
-//                 alt="profilepic"
-//                 src="/Images/profilepic.png"
-//                 height="30px"
-//               />
-//             </a>
-//           ) : (
-//             <a
-//               className="pn"
-//               style={{ margin: "0px 5px", color: "black" }}
-//               alt="profilepic"
-//             >
-//               <img
-//                 alt="profilepic"
-//                 style={{ borderRadius: "50%" }}
-//                 src={cookies.get("image")}
-//                 height="30px"
-//               />
-//             </a>
-//           )}
-//           <Dropdown>
-//             <Dropdown.Toggle id="dropdown-basic">
-//               <img
-//                 src="/Images/downarr.svg"
-//                 height="15px"
-//                 alt="Arrow"
-//                 style={{ margin: "2px 3px", color: "black" }}
-//               />
-//             </Dropdown.Toggle>
-//             <Dropdown.Menu>
-//               <Dropdown.Item id="namedown" href="#/action-1">
-//                 Welcome, Yash Agarwal
-//               </Dropdown.Item>
-//               <Dropdown.Item href="/my-profile">Profile</Dropdown.Item>
-//               <Dropdown.Item href="/subscription">Subscriptions</Dropdown.Item>
-//               <Dropdown.Item href="/messaging">Messages</Dropdown.Item>
-//               <Dropdown.Item href="/my-activity">Activity</Dropdown.Item>
-//               <Dropdown.Item href="">Payments</Dropdown.Item>
-
-//               <Dropdown.Item onClick={() => onLogout()} href="/">
-//                 Logout
-//               </Dropdown.Item>
-//             </Dropdown.Menu>
-//           </Dropdown>
-//         </div>
-//       </header>
-//     </div>
-//   );
-// }
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { useNavigate } from "react-router-dom";
+
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
+  { name: "Home", href: "/home", current: false },
+  { name: "Donate Funds", href: "/donatefunds", current: false },
+  { name: "View Funds", href: "/viewfunds", current: false },
+  { name: "My Donations", href: "/mydonations", current: false },
 ];
+console.log()
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const navigate = useNavigate();
+  function signout(){
+    navigate("/login")
+    // console.log("jgjg");
+  }
+  console.log(props)
+  if(props.page === "MyDonations")
+  {
+    navigation[3].current = true;
+  }
+  if(props.page === "ViewFunds")
+  {
+    navigation[2].current = true;
+  }
+  if(props.page === "DonateFunds")
+  {
+    navigation[1].current = true;
+  }
+  if(props.page === "Home")
+  {
+    navigation[0].current = true;
+  }
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -207,12 +61,12 @@ export default function Navbar() {
                 <div className="flex-shrink-0 flex items-center">
                   <img
                     className="block lg:hidden h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                    src="/Go1.png"
                     alt="Workflow"
                   />
                   <img
                     className="hidden lg:block h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+                    src="/Go1.png"
                     alt="Workflow"
                   />
                 </div>
@@ -241,8 +95,9 @@ export default function Navbar() {
                   type="button"
                   className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  <p>Yash Agarwal</p>
+                  {/* <span className="sr-only">View notifications</span>
+                  <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                 </button>
 
                 {/* Profile dropdown */}
@@ -269,33 +124,9 @@ export default function Navbar() {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
+                          <a onClick={()=>{
+                            signout();
+                          }}
                             href="#"
                             className={classNames(
                               active ? "bg-gray-100" : "",
