@@ -14,29 +14,49 @@ export default function Donate() {
   const cookies = new Cookies();
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/auth/checkauth`, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "x-access-token": cookies.get("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data)
+        // console.log(res.data);
+        // navigate("/home");
+      })
+      .catch((err) => {
+        console.log(err);
+        cookies.set("token", "");
+        navigate("/login");
+      });
+  }, []);
+
+  
   function Updatesubmit(e) {
     e.preventDefault();
 
     console.log(amount, name, mode_of_payment, message);
     const data = {
-      amount : amount,
-      message : message,
-      name : name,
+      amount: amount,
+      message: message,
+      name: name,
       mode_of_payment: mode_of_payment,
-      date: new Date().toJSON().slice(0, 10)
+      date: new Date().toJSON().slice(0, 10),
     };
 
-    let token = cookies.get('token')
+    let token = cookies.get("token");
     const headers = {
       "Content-Type": "application/json",
       "x-access-token": token,
-    }
-    axios.post(
-        `http://localhost:5000/funds/donate`, data,
-        {
-          headers: headers
-        }
-      )
+    };
+    axios
+      .post(`http://localhost:5000/funds/donate`, data, {
+        headers: headers,
+      })
       .then((res) => {
         alert("successfully Donated");
 

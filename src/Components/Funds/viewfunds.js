@@ -49,6 +49,27 @@ export default function CustomizedTables() {
   const navigate = useNavigate();
   useEffect(() => {
     axios
+      .get(`http://localhost:5000/api/auth/checkauth`, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "x-access-token": cookies.get("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data)
+        // console.log(res.data);
+        // navigate("/home");
+      })
+      .catch((err) => {
+        console.log(err);
+        cookies.set("token", "");
+        navigate("/login");
+      });
+
+
+
+
+    axios
       .get(`http://localhost:5000/funds/all-donations`, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -62,8 +83,6 @@ export default function CustomizedTables() {
       })
       .catch((err) => {
         console.log(err);
-        cookies.set("token", "");
-        navigate("/login");
       });
   }, []);
 

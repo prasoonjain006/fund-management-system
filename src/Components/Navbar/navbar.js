@@ -2,6 +2,12 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import axios from "axios";
+import Cookies from "universal-cookie";
+
+
 
 
 const navigation = [
@@ -10,34 +16,52 @@ const navigation = [
   { name: "View Funds", href: "/viewfunds", current: false },
   { name: "My Donations", href: "/mydonations", current: false },
 ];
-console.log()
-
+console.log();
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar(props) {
+  const cookies = new Cookies();
+
+  const [username, setUsername] = useState("");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/auth/checkauth`, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "x-access-token": cookies.get("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data)
+        setUsername(res.data.user[0].name)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }, []);
+
+
+
+
   const navigate = useNavigate();
-  function signout(){
-    navigate("/login")
+  function signout() {
+    navigate("/login");
     // console.log("jgjg");
   }
-  console.log(props)
-  if(props.page === "MyDonations")
-  {
+  console.log(props);
+  if (props.page === "MyDonations") {
     navigation[3].current = true;
   }
-  if(props.page === "ViewFunds")
-  {
+  if (props.page === "ViewFunds") {
     navigation[2].current = true;
   }
-  if(props.page === "DonateFunds")
-  {
+  if (props.page === "DonateFunds") {
     navigation[1].current = true;
   }
-  if(props.page === "Home")
-  {
+  if (props.page === "Home") {
     navigation[0].current = true;
   }
   return (
@@ -95,7 +119,7 @@ export default function Navbar(props) {
                   type="button"
                   className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
-                  <p>Yash Agarwal</p>
+                  <p>{username}</p>
                   {/* <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                 </button>
@@ -124,9 +148,10 @@ export default function Navbar(props) {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a onClick={()=>{
-                            signout();
-                          }}
+                          <a
+                            onClick={() => {
+                              signout();
+                            }}
                             href="#"
                             className={classNames(
                               active ? "bg-gray-100" : "",
