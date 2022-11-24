@@ -1,0 +1,12 @@
+.tbh{
+    width: 80%;
+    margin: auto;
+    padding-top: 50px;
+    /* text-align: center; */
+}
+
+.hd{
+    font-size: 40px;
+    padding-bottom: 10px;
+    font-family: "Poppins", sans-serif;
+}
