@@ -6,7 +6,6 @@ export default function ViewFunds() {
   return (
     <>
       <Navbar page="ViewFunds" />
-      {/* <h1>Cart</h1> */}
       <CustomizedTables />
     </>
   );

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import LoginPage from './Pages/Login';
 import Signup from './Pages/Signup';
@@ -7,7 +6,6 @@ import ViewFunds from './Pages/ViewFunds';
 import DonateFunds from './Pages/DonateFunds';
 import MyDonations from './Pages/MyDonations';
 import Home from './Pages/Home';
-// import Navbar from './Components/Navbar/navbar';
 function App() {
   return (
     <div className="App">
@@ -20,16 +18,6 @@ function App() {
           <Route path="/donatefunds" element={<DonateFunds />} />
           <Route path="/mydonations" element={<MyDonations />} />
           <Route path="/home" element={<Home />} />
-
-
-
-          {/* <Route path="/navbar" element={<Navbar />} /> */}
-
-          {/* <Route path="/users" element={<Users />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/orders" element={<Order />} />
-          <Route path="/add-products" exact element={<AddProducts />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
