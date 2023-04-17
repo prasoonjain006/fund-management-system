@@ -6,6 +6,7 @@ import ViewFunds from './Pages/ViewFunds';
 import DonateFunds from './Pages/DonateFunds';
 import MyDonations from './Pages/MyDonations';
 import Home from './Pages/Home';
+import UtilizeFunds from './Components/Funds/withdraw';
 function App() {
   return (
     <div className="App">
@@ -16,6 +17,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/viewfunds" element={<ViewFunds />} />
           <Route path="/donatefunds" element={<DonateFunds />} />
+          <Route path="/withdraw" element={<UtilizeFunds />} />
           <Route path="/mydonations" element={<MyDonations />} />
           <Route path="/home" element={<Home />} />
         </Routes>

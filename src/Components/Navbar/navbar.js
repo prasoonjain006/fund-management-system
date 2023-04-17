@@ -7,16 +7,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-
-
-
 const navigation = [
   { name: "Home", href: "/home", current: false },
   { name: "Donate Funds", href: "/donatefunds", current: false },
   { name: "View Funds", href: "/viewfunds", current: false },
   { name: "My Donations", href: "/mydonations", current: false },
+   { name: "Withdraw", href: "/withdraw", current: false },
 ];
-console.log();
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,25 +28,23 @@ export default function Navbar(props) {
     axios
       .get(`http://localhost:5000/api/auth/checkauth`, {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
           "x-access-token": cookies.get("token"),
         },
       })
       .then((res) => {
-        console.log(res.data)
-        setUsername(res.data.user[0].name)
+        console.log(res.data);
+        setUsername(res.data.user[0].name);
       })
       .catch((err) => {
         console.log(err);
       });
-    }, []);
-
-
-
+  }, []);
 
   const navigate = useNavigate();
   function signout() {
     navigate("/login");
+    cookies.set("token", "");
     // console.log("jgjg");
   }
   console.log(props);
@@ -152,7 +148,7 @@ export default function Navbar(props) {
                             onClick={() => {
                               signout();
                             }}
-                            href="#"
+                            href="/login"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"

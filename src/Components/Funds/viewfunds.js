@@ -12,10 +12,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
+import Web3 from "web3";
+import { simpleStorageAbi } from "../../Utils/abis";
+import { contractAddress } from "../../Utils/db";
 
 const cookies = new Cookies();
-
-
+const web3 = new Web3(Web3.givenProvider);
+const contractAddr = contractAddress;
+const SimpleContract = new web3.eth.Contract(simpleStorageAbi, contractAddr);
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,65 +32,62 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
+  "&:nth-of-type(odd)": {},
   // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
 
-
-
-
-
-
-
 export default function CustomizedTables() {
-
   const [funds, setFunds] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
+  const [withdrawnAmount, setWithdrawnAmount] = useState("");
+  const [donatedAmount, setDonatedAmount] = useState("");
+
   const navigate = useNavigate();
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/auth/checkauth`, {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
           "x-access-token": cookies.get("token"),
         },
       })
       .then((res) => {
-        console.log(res.data)
-        // console.log(res.data);
-        // navigate("/home");
+        console.log(res.data);
+        if (res?.data?.user[0].isAdmin == false) {
+          alert("You are not authorize to view this page");
+          navigate("/home");
+        } else if (res?.data?.user[0].isAdmin) {
+          getAllDonations();
+        }
       })
       .catch((err) => {
         console.log(err);
         cookies.set("token", "");
         navigate("/login");
       });
-
-
-
-
-    axios
-      .get(`http://localhost:5000/funds/all-donations`, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "x-access-token": cookies.get("token"),
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setFunds(res.data.funds);
-
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }, []);
 
-
+  const getAllDonations = async (e) => {
+    const allFunds = await SimpleContract.methods.getAll().call();
+    setFunds(allFunds);
+    let totalBalance = 0;
+    let totalDonation = 0;
+    let totalWithdrawal = 0;
+    allFunds.forEach((element) => {
+      totalBalance += Number(element.amount);
+      if (Number(element.amount) < 0) {
+        totalWithdrawal += Number(element.amount) * -1;
+      } else {
+        totalDonation += Number(element.amount);
+      }
+    });
+    setTotalAmount(totalBalance);
+    setWithdrawnAmount(totalWithdrawal);
+    setDonatedAmount(totalDonation);
+  };
 
   return (
     <div className="tbh wrapper fadeInDown pt-6">
@@ -105,22 +106,75 @@ export default function CustomizedTables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {funds && funds.map((row) => (
-              <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.amount}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row._id}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.date}</StyledTableCell>
-                <StyledTableCell align="center">{row.message}</StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {funds &&
+              funds.map((row) => (
+                <StyledTableRow
+                  bgColor={row.amount < 0 ? "#FFCCCB" : "FFFFE0"}
+                  key={row.name}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    {row.name}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    ₹ {row.amount}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.transactionId.slice(0, 16)}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row.date}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.message}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <div
+        style={{
+          backgroundColor: "lightblue",
+          marginTop: "20px",
+          padding: "10px",
+          borderRadius: "12px",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "25px",
+            color: "black",
+            fontWeight: "600",
+            alignSelf: "flex-end",
+            margin: "30px",
+          }}
+        >
+          {" "}
+          Amount Donated : ₹ {donatedAmount}{" "}
+        </span>
+        <span
+          style={{
+            fontSize: "25px",
+            color: "black",
+            fontWeight: "600",
+            alignSelf: "flex-end",
+            margin: "30px",
+          }}
+        >
+          {" "}
+          Amount Withdrawn : ₹ {withdrawnAmount}{" "}
+        </span>
+        <span
+          style={{
+            fontSize: "25px",
+            color: "black",
+            fontWeight: "600",
+            alignSelf: "flex-end",
+            margin: "30px",
+          }}
+        >
+          {" "}
+          Balance : ₹ {totalAmount}{" "}
+        </span>
+      </div>
     </div>
   );
 }

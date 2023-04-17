@@ -18,7 +18,7 @@ export default function Signup() {
     axios
       .get(`http://localhost:5000/api/auth/checkauth`, {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
           "x-access-token": cookies.get("token"),
         },
       })
@@ -55,12 +55,13 @@ export default function Signup() {
           email: email,
           password: password,
           name:name,
-          number:number,
-          
+          mobile:number,
+
         })
         .then((res) => {
           console.log("response from submitting the form successful", res.data);
           alert("Registered successfully, you can log in now");
+          navigate('/login')
         })
         .catch((err) => {
           console.log(err);

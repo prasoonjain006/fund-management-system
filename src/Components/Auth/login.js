@@ -51,7 +51,8 @@ export default function Login() {
         })
         .catch((err) => {
           console.log(err);
-          alert("Some error");
+          alert("Some error, please try again");
+          cookies.set("token", null);
         });
     }
   }

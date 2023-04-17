@@ -6,6 +6,10 @@ import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Web3 from "web3";
+import { simpleStorageAbi } from "../../Utils/abis";
+import { contractAddress } from "../../Utils/db";
+
 export default function Donate() {
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -14,6 +18,43 @@ export default function Donate() {
   const cookies = new Cookies();
   const navigate = useNavigate();
 
+  const web3 = new Web3(Web3.givenProvider);
+
+  const contractAddr = contractAddress;
+  const SimpleContract = new web3.eth.Contract(simpleStorageAbi, contractAddr);
+
+  const handleSubmitByBlockchain = async (e) => {
+    const accounts = await window.ethereum.enable();
+    const account = accounts[0];
+    const userId = cookies.get("id");
+    const date = new Date().toDateString();
+    let reg = /^\d+$/;
+    let isValid = reg.test(amount);
+    if(!isValid || amount === 0){
+      alert("Please enter a valid amount")
+      return false;
+    }
+    console.log(date);
+    const gas = await SimpleContract.methods
+      .registerFunds(name, amount, mode_of_payment, date, message, userId)
+      .estimateGas();
+
+    const result =  await SimpleContract.methods
+      .registerFunds(name, amount, mode_of_payment, date, message, userId)
+      .send({
+        from: account,
+        gas: 10 * gas,
+      });
+
+    console.log(result);
+    // const transactionDetail = await web3.eth.getTransaction(result.transactionHash);
+    if (result) {
+      alert(
+        `Successfully added the transaction in blockchain with \n  transactionHash = ${result.transactionHash} \n blockNumber = ${result.blockNumber} `
+      );
+    }
+    console.log(result)
+  };
 
   useEffect(() => {
     axios
@@ -24,9 +65,7 @@ export default function Donate() {
         },
       })
       .then((res) => {
-        console.log(res.data)
-        // console.log(res.data);
-        // navigate("/home");
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -35,37 +74,9 @@ export default function Donate() {
       });
   }, []);
 
-  
   function Updatesubmit(e) {
     e.preventDefault();
-
-    console.log(amount, name, mode_of_payment, message);
-    const data = {
-      amount: amount,
-      message: message,
-      name: name,
-      mode_of_payment: mode_of_payment,
-      date: new Date().toJSON().slice(0, 10),
-    };
-
-    let token = cookies.get("token");
-    const headers = {
-      "Content-Type": "application/json",
-      "x-access-token": token,
-    };
-    axios
-      .post(`http://localhost:5000/funds/donate`, data, {
-        headers: headers,
-      })
-      .then((res) => {
-        alert("successfully Donated");
-
-        // navigate("/home");
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Some error");
-      });
+    handleSubmitByBlockchain();
   }
 
   return (
