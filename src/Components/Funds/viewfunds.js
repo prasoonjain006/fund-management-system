@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
 import { simpleStorageAbi } from "../../Utils/abis";
 import { contractAddress } from "../../Utils/db";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cookies = new Cookies();
 const web3 = new Web3(Web3.givenProvider);
@@ -44,7 +46,22 @@ export default function CustomizedTables() {
   const [totalAmount, setTotalAmount] = useState("");
   const [withdrawnAmount, setWithdrawnAmount] = useState("");
   const [donatedAmount, setDonatedAmount] = useState("");
-
+  const showSuccessToast = (msg) => {
+    toast.success(msg, {
+        data: {
+            title: 'Success toast',
+            text: 'This is a success message'
+        }
+    });
+};
+const showErrorToast = (msg) => {
+    toast.error(msg, {
+        data: {
+            title: 'Error toast',
+            text: 'This is an error message'
+        }
+    });
+};
   const navigate = useNavigate();
   useEffect(() => {
     axios
@@ -57,7 +74,7 @@ export default function CustomizedTables() {
       .then((res) => {
         console.log(res.data);
         if (res?.data?.user[0].isAdmin == false) {
-          alert("You are not authorize to view this page");
+          showErrorToast("You are not authorize to view this page");
           navigate("/home");
         } else if (res?.data?.user[0].isAdmin) {
           getAllDonations();
@@ -90,6 +107,10 @@ export default function CustomizedTables() {
   };
 
   return (
+    <>
+       <ToastContainer 
+          position="bottom-center"
+          autoClose={2000}  />
     <div className="tbh wrapper fadeInDown pt-6">
       <div className="hd">
         <p> All Transactions</p>
@@ -176,5 +197,6 @@ export default function CustomizedTables() {
         </span>
       </div>
     </div>
+    </>
   );
 }

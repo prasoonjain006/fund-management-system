@@ -4,6 +4,8 @@ import "./Auth.css";
 import Cookies from "universal-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Signup() {
   const cookies = new Cookies();
@@ -13,7 +15,22 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-
+  const showSuccessToast = (msg) => {
+    toast.success(msg, {
+        data: {
+            title: 'Success toast',
+            text: 'This is a success message'
+        }
+    });
+};
+const showErrorToast = (msg) => {
+    toast.error(msg, {
+        data: {
+            title: 'Error toast',
+            text: 'This is an error message'
+        }
+    });
+};
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/auth/checkauth`, {
@@ -31,23 +48,18 @@ export default function Signup() {
         cookies.set("token", "");
       });
   }, []);
-
+  let reg = /^\d+$/;
   function Updatesubmit(e) {
     e.preventDefault();
-    // console.log(password);
-    // console.log(email)
-    // console.log(confirmPassword)
-    // console.log(name)
-    // console.log(number)
 
     if (password === "" || email === "" || confirmPassword === "" || name === "" || number === "") {
-      alert("Enter all the fields");
+      showErrorToast("Enter all the fields");
     } else if (password != confirmPassword) {
-      alert("Password do not match");
+      showErrorToast("Password do not match");
     } else if (password.length < 6) {
-      alert("Password must be 6 digit long");
-    } else if(!(number.length === 10)){
-      alert("Enter Valid Number");
+      showErrorToast("Password must be 6 digit long");
+    } else if(!(number.length === 10 && reg.test(number))){
+      showErrorToast("Enter Valid Number");
     }
     else {
       axios
@@ -60,18 +72,22 @@ export default function Signup() {
         })
         .then((res) => {
           console.log("response from submitting the form successful", res.data);
-          alert("Registered successfully, you can log in now");
+          showSuccessToast("Registered successfully, you can log in now");
           navigate('/login')
         })
         .catch((err) => {
           console.log(err);
-          alert("Check your email again, If already registered, Please login");
+          showSuccessToast("Check your email again, If already registered, Please login");
           console.log("ERROR  from update in form", err);
         });
     }
   }
 
   return (
+    <>
+    <ToastContainer 
+          position="bottom-center"
+          autoClose={2000}  />
     <div className="wrapper fadeInDown">
       <div id="formContent">
         <Link to="/login">
@@ -139,5 +155,6 @@ export default function Signup() {
         </div>
       </div>
     </div>
+    </>
   );
 }

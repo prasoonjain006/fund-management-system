@@ -5,13 +5,30 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const cookies = new Cookies();
   const navigate = useNavigate();
-
+  const showSuccessToast = (msg) => {
+    toast.success(msg, {
+        data: {
+            title: 'Success toast',
+            text: 'This is a success message'
+        }
+    });
+};
+const showErrorToast = (msg) => {
+    toast.error(msg, {
+        data: {
+            title: 'Error toast',
+            text: 'This is an error message'
+        }
+    });
+};
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/auth/checkauth`, {
@@ -34,7 +51,7 @@ export default function Login() {
   function Updatesubmit(e) {
     e.preventDefault();
     if (password === "" || email === "") {
-      alert.error("Enter password and email");
+      showErrorToast("Enter password and email");
     } else {
       axios
         .post(`http://localhost:5000/api/auth/signin`, {
@@ -42,7 +59,7 @@ export default function Login() {
           password: password,
         })
         .then((res) => {
-          alert("Login success");
+          showSuccessToast("Login success");
           console.log(res.data);
           cookies.set("id", res.data.id);
           cookies.set("token", res.data.accessToken);
@@ -51,13 +68,17 @@ export default function Login() {
         })
         .catch((err) => {
           console.log(err);
-          alert("Some error, please try again");
+          showErrorToast("Some error, please try again");
           cookies.set("token", null);
         });
     }
   }
 
   return (
+    <>
+    <ToastContainer 
+          position="bottom-center"
+          autoClose={2000}  />
     <div className="wrapper fadeInDown pt-6">
       <div id="formContent">
         {/* Tabs Titles */}
@@ -99,5 +120,6 @@ export default function Login() {
         {/* Remind Passowrd */}
       </div>
     </div>
+    </>
   );
 }

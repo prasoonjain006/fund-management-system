@@ -5,7 +5,8 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Web3 from "web3";
 import { simpleStorageAbi } from "../../Utils/abis";
 import Navbar from "../Navbar/navbar";
@@ -22,7 +23,22 @@ export default function UtilizeFunds() {
   const [donatedAmount, setDonatedAmount] = useState("")
   const cookies = new Cookies();
   const navigate = useNavigate();
-
+  const showSuccessToast = (msg) => {
+    toast.success(msg, {
+        data: {
+            title: 'Success toast',
+            text: 'This is a success message'
+        }
+    });
+};
+const showErrorToast = (msg) => {
+    toast.error(msg, {
+        data: {
+            title: 'Error toast',
+            text: 'This is an error message'
+        }
+    });
+};
   const web3 = new Web3(Web3.givenProvider);
 
   const contractAddr = contractAddress;
@@ -39,7 +55,7 @@ export default function UtilizeFunds() {
     let reg = /^\d+$/;
     let isValid = reg.test(amount);
     if (!isValid || amount === 0) {
-      alert("Please enter a valid amount");
+      showErrorToast("Please enter a valid amount");
       return false;
     }
     let amountToWithdraw = amount;
@@ -76,7 +92,7 @@ export default function UtilizeFunds() {
     console.log(result);
     // const transactionDetail = await web3.eth.getTransaction(result.transactionHash);
     if (result) {
-      alert(
+      showSuccessToast(
         `Successfully added the transaction in blockchain with \n  transactionHash = ${result.transactionHash} \n blockNumber = ${result.blockNumber} `
       );
     }
@@ -93,7 +109,7 @@ export default function UtilizeFunds() {
       })
       .then((res) => {
         if (res?.data?.user[0].isAdmin == false) {
-          alert("You are not authorize to view this page");
+          showErrorToast("You are not authorize to view this page");
           navigate("/home");
         }
         getAllDonations();
@@ -127,7 +143,7 @@ export default function UtilizeFunds() {
 
   function Updatesubmit(e) {
     if(amount > totalAmount){
-      alert("Cannot withdraw more than balance amount")
+      showErrorToast("Cannot withdraw more than balance amount")
       return false;
     }
     e.preventDefault();
@@ -136,6 +152,9 @@ export default function UtilizeFunds() {
 
   return (
     <>
+       <ToastContainer 
+          position="bottom-center"
+          autoClose={2000}  />
       <Navbar page="withdraw" />
       <div className="wrapper fadeInDown pt-6">
         <div id="formContent">
