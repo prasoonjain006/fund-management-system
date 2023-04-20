@@ -1,0 +1,5 @@
+2023/04/19-18:42:24.789 62ec Recovering log #22
+2023/04/19-18:42:24.790 62ec Level-0 table #24: started
+2023/04/19-18:42:24.803 62ec Level-0 table #24: 1113 bytes OK
+2023/04/19-18:42:24.818 62ec Delete type=0 #22
+2023/04/19-18:42:24.819 62ec Delete type=3 #20
